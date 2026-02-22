@@ -1,5 +1,6 @@
 package com.billmaster.product.controller;
 
+import com.billmaster.product.dto.LowStock;
 import com.billmaster.product.dto.ProductRequest;
 import com.billmaster.product.dto.ProductResponse;
 import com.billmaster.product.service.ProductService;
@@ -11,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/api/products")
@@ -39,7 +44,10 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
-
+    @GetMapping("/lowstock")
+    public ResponseEntity<List<LowStock>> lowstock(){
+        return ResponseEntity.ok(productService.getLowStocks());
+    }
     @GetMapping("/export/pdf")
     public void exportProductsToPDF(HttpServletResponse response) throws Exception {
 
@@ -55,7 +63,7 @@ public class ProductController {
 
         return ResponseEntity.ok(message);
     }
-@PutMapping("/{id}")
+    @PutMapping("/{id}")
 public ResponseEntity<ProductResponse> updateProduct(
         @PathVariable String id,
         @RequestBody ProductRequest request) {

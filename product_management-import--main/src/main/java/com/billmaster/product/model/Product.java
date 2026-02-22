@@ -16,7 +16,7 @@ public class Product {
     private int quantity;
     private String sku;
     private String category;
-      public Product() {
+    public Product() {
     }
     
 public Product(String id, String sku,String name, double price, int stock, String category) {
@@ -26,14 +26,16 @@ public Product(String id, String sku,String name, double price, int stock, Strin
     this.price = price;
     this.stock = stock;
     this.category = category;
+
 }
 
-    public Product(String name, double price,String sku, int stock, String category) {
+    public Product(String name, double price,String sku, int stock, String category,int quantity) {
         this.name = name;
         this.sku=sku;
         this.price = price;
         this.stock = stock;
         this.category = category;
+        this.quantity=quantity;
     }
 
     public String getId() {

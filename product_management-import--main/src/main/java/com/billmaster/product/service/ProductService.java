@@ -1,5 +1,6 @@
 package com.billmaster.product.service;
 
+import com.billmaster.product.dto.LowStock;
 import com.billmaster.product.dto.ProductRequest;
 import com.billmaster.product.dto.ProductResponse;
 
@@ -15,7 +16,7 @@ public interface ProductService {
     ProductResponse createProduct(ProductRequest request);
 
     List<ProductResponse> getAllProducts();
-
+    List<LowStock> getLowStocks();
     ProductResponse getProductBySku(String sku);
 
     void deleteProduct(String id);
@@ -25,7 +26,6 @@ public interface ProductService {
     void exportProductsToPDF(HttpServletResponse response) throws Exception;
     
     ProductResponse updateProduct(String id, ProductRequest request);
-
     String importProductsFromCSV(MultipartFile file);
 
 }

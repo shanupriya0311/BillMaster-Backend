@@ -1,14 +1,15 @@
 package com.billmaster.product.service.ServiceImpl;
 
+import com.billmaster.product.dto.LowStock;
 import com.billmaster.product.dto.ProductRequest;
 import com.billmaster.product.dto.ProductResponse;
 import com.billmaster.product.model.Product;
 import com.billmaster.product.repository.ProductRepository;
 import com.billmaster.product.service.ProductService;
-
+import com.billmaster.product.model.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -56,6 +57,24 @@ public class ProductServiceImpl implements ProductService {
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
+   @Override
+public List<LowStock> getLowStocks() {
+    List<Product> products = productRepository.findAll();
+    List<LowStock> lowStocks = new ArrayList<>();
+    for (Product product : products) {
+        if (product.getStock() <= 5) {
+
+            LowStock lowStock = new LowStock();
+            lowStock.setName(product.getName());
+            lowStock.setSku(product.getSku());
+            lowStock.setStock(String.valueOf(product.getStock()));
+
+            lowStocks.add(lowStock);
+        }
+    }
+
+    return lowStocks;
+}
 @Override
     public ProductResponse getProductBySku(String sku) {
 
