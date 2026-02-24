@@ -33,23 +33,39 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
     }
 
-    @Override
-    public ProductResponse createProduct(ProductRequest request) {
+  
+@Override
+public ProductResponse createProductWithImage(
+        String sku,
+        String name,
+        String category,
+        double price,
+        int stock,
+        MultipartFile image) throws Exception {
 
-        Product product = new Product(
-                null,
-                request.getSku(),
-                request.getName(),
-                request.getPrice(),
-                request.getStock(),
-                request.getCategory()
-        );
+    String uploadDir = "uploads/";
+    java.io.File dir = new java.io.File(uploadDir);
+    if (!dir.exists()) dir.mkdirs();
 
-        Product saved = productRepository.save(product);
-        return mapToResponse(saved);
-    }
+    String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+    java.nio.file.Path path = java.nio.file.Paths.get(uploadDir + fileName);
+    java.nio.file.Files.write(path, image.getBytes());
 
+    Product product = new Product(
+            null,
+            sku,
+            name,
+            price,
+            stock,
+            category
+    );
 
+    product.setImageUrl("/uploads/" + fileName);
+
+    Product saved = productRepository.save(product);
+
+    return mapToResponse(saved);
+}
     @Override
     public List<ProductResponse> getAllProducts() {
         return productRepository.findAll()
@@ -215,13 +231,23 @@ public ProductResponse updateProduct(String id,
 
     private ProductResponse mapToResponse(Product product) {
 
-        return new ProductResponse(
-                product.getId(),
-                product.getSku(),
-                product.getName(),
-                product.getPrice(),
-                product.getStock(),
-                product.getCategory()
-        );
+      return new ProductResponse(
+        product.getId(),
+        product.getSku(),
+        product.getName(),
+        product.getPrice(),
+        product.getStock(),
+        product.getCategory(),
+        product.getImageUrl()
+);
     }
+    @Override
+public void saveImage(String id, String imageUrl) {
+
+    Product product = productRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Product not found"));
+
+    product.setImageUrl(imageUrl);
+    productRepository.save(product);
+}
 }

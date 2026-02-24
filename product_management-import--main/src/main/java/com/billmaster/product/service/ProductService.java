@@ -13,7 +13,13 @@ import java.util.List;
 
 public interface ProductService {
 
-    ProductResponse createProduct(ProductRequest request);
+  ProductResponse createProductWithImage(
+        String sku,
+        String name,
+        String category,
+        double price,
+        int stock,
+        MultipartFile image) throws Exception;
 
     List<ProductResponse> getAllProducts();
     List<LowStock> getLowStocks();
@@ -24,7 +30,7 @@ public interface ProductService {
     void exportProducts(PrintWriter writer);
 
     void exportProductsToPDF(HttpServletResponse response) throws Exception;
-    
+    void saveImage(String id, String imageUrl);
     ProductResponse updateProduct(String id, ProductRequest request);
     String importProductsFromCSV(MultipartFile file);
 

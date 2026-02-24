@@ -8,18 +8,26 @@ public class ProductResponse {
     private int stock;
     private String sku;
     private String category;
+    private String imageUrl;
 
     public ProductResponse() {}
 
-    public ProductResponse(String id, String sku, String name, double price, int stock, String category) {
-        this.id = id;
-        this.sku = sku;
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.category = category;
-    }
+  public ProductResponse(String id, String sku, String name, double price, int stock, String category, String imageUrl) {
+    this.id = id;
+    this.sku = sku;
+    this.name = name;
+    this.price = price;
+    this.stock = stock;
+    this.category = category;
+    this.imageUrl = imageUrl;
+}
+public String getImageUrl() {
+    return imageUrl;
+}
 
+public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+}
      public String getSku() {
         return sku;
     }

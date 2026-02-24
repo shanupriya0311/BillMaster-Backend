@@ -15,6 +15,7 @@ public class Product {
     private String barcode;
     private int quantity;
     private String sku;
+    private String imageUrl;
     private String category;
     public Product() {
     }
@@ -47,7 +48,13 @@ public Product(String id, String sku,String name, double price, int stock, Strin
      public void setSku(String sku) {
         this.sku = sku;
     }
+    public String getImageUrl() {
+    return imageUrl;
+}
 
+public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+}
     public void setId(String id) {
         this.id = id;
     }

@@ -27,10 +27,19 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-    @PostMapping
-    public ResponseEntity<ProductResponse> create(@RequestBody ProductRequest request) {
-        return ResponseEntity.ok(productService.createProduct(request));
-    }
+  @PostMapping(consumes = "multipart/form-data")
+public ResponseEntity<ProductResponse> createProductWithImage(
+        @RequestParam String sku,
+        @RequestParam String name,
+        @RequestParam String category,
+        @RequestParam double price,
+        @RequestParam int stock,
+        @RequestParam("image") MultipartFile image) throws Exception {
+
+    return ResponseEntity.ok(
+            productService.createProductWithImage(sku, name, category, price, stock, image)
+    );
+}
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAll() {
         return ResponseEntity.ok(productService.getAllProducts());
@@ -71,6 +80,23 @@ public ResponseEntity<ProductResponse> updateProduct(
     return ResponseEntity.ok(
             productService.updateProduct(id, request)
     );
+}
+@PostMapping("/{id}/upload")
+public ResponseEntity<String> uploadImage(
+        @PathVariable String id,
+        @RequestParam("file") MultipartFile file) throws Exception {
+
+    String uploadDir = "uploads/";
+    java.io.File dir = new java.io.File(uploadDir);
+    if (!dir.exists()) dir.mkdirs();
+
+    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+    java.nio.file.Path path = java.nio.file.Paths.get(uploadDir + fileName);
+    java.nio.file.Files.write(path, file.getBytes());
+
+    productService.saveImage(id, "/uploads/" + fileName);
+
+    return ResponseEntity.ok("Image uploaded");
 }
 
 }
